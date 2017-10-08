@@ -16,6 +16,13 @@ class MyTestCase(testing.TestCase):
 
 class TestMyApp(MyTestCase):
 
+    def test_info(self):
+        """Testing info"""
+        doc = {'version':'0.1'}
+        result = self.simulate_get('/')
+        self.assertEqual(result.json, doc)
+
+
     def test_health(self):
         """Testing health"""
         result = self.simulate_get('/health')
