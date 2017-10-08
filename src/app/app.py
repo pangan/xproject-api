@@ -4,8 +4,14 @@ import falcon
 class Resource(object):
 
     def on_get(self, req, resp):
-        resp.body = ('OK')
-        resp.status = falcon.HTTP_200
+        if req.path == '/health':
+            resp.body = ('OK')
+            resp.status = falcon.HTTP_200
+
+        if req.path =='/test':
+            resp.body = ('testing...')
+            resp.status = falcon.HTTP_200
+
 
 
 def myapp():
@@ -18,5 +24,5 @@ def myapp():
 if __name__ == '__main__':
     from wsgiref import simple_server
     wsgi_app = myapp()
-    httpd = simple_server.make_server('127.0.0.1', 8070, wsgi_app)
+    httpd = simple_server.make_server('127.0.0.1', 8080, wsgi_app)
     httpd.serve_forever()

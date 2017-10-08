@@ -15,8 +15,15 @@ class MyTestCase(testing.TestCase):
 
 
 class TestMyApp(MyTestCase):
-    def test_get_message(self):
-        doc = {u'message': u'Hello world!'}
 
+    def test_health(self):
+        """Testing health"""
         result = self.simulate_get('/health')
         self.assertEqual(result.status, falcon.HTTP_200)
+        self.assertEqual(result.text, 'OK')
+
+    def test_testing(self):
+        """Testing testing"""
+        result = self.simulate_get('/test')
+        self.assertEqual(result.status, falcon.HTTP_200)
+        self.assertEqual(result.text, 'testing...')
