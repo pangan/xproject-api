@@ -18,7 +18,9 @@ class TestMyApp(MyTestCase):
 
     def test_info(self):
         """Testing info"""
-        doc = {'version':'0.1'}
+        doc = {
+            'project': 'xproject-api',
+            'version':'0.1'}
         result = self.simulate_get('/')
         self.assertEqual(result.json, doc)
 
@@ -34,3 +36,16 @@ class TestMyApp(MyTestCase):
         result = self.simulate_get('/test')
         self.assertEqual(result.status, falcon.HTTP_200)
         self.assertEqual(result.text, 'testing...')
+
+    def test_posting_data(self):
+        """Test posting data"""
+        result = self.simulate_post('/post_metrics')
+        self.assertEqual(result.status, falcon.HTTP_200)
+
+    def test_not_posting_data_without_post(self):
+        """Test not posting data without post"""
+        result = self.simulate_get('/post_metrics')
+        self.assertEqual(result.status, falcon.HTTP_405)
+
+        result = self.simulate_put('/post_metrics')
+        self.assertEqual(result.status, falcon.HTTP_405)
