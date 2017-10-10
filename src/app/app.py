@@ -25,7 +25,20 @@ class Resource(object):
 
 
     def on_post(self, req, resp):
-        resp.status = falcon.HTTP_200
+
+        try:
+            if 'application/json' not in req.content_type:
+                raise ValueError('Not json content-type!')
+            request_data = req.stream.read()
+            json.loads(request_data)
+            resp.body = request_data
+            resp.status = falcon.HTTP_200
+        except ValueError, e:
+            resp.body = e.message
+            resp.status = falcon.HTTP_400
+
+
+
 
 
 
