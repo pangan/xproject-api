@@ -85,23 +85,6 @@ class TestMyApp(MyTestCase):
     def test_write_influx(self):
         """Test writing into the influxdb"""
 
-        influx_host_params= {
-            'host': INFLUX_HOST,
-            'port': 80,
-            'database': 'xproject_test'
-        }
-        data_params = [
-            {
-                "measurement": "xmeasurement",
-                "tags": {
-                    "host": "server01",
-                    "region": "us-west"
-                },
-                "fields": {
-                    "value": 123
-                }
-            }
-        ]
 
 
         client = influxdb.InfluxDBClient(
@@ -109,11 +92,11 @@ class TestMyApp(MyTestCase):
             port=80, database='xproject_test')
         client.drop_database('xproject_test')
 
-        rs = self.simulate_get('/write_test',query_string='database=xproject_test&value=123')
+        rs = self.simulate_get('/write_test',query_string='database=xproject_test&value=12.5')
         a = rs.status
         #write_to_influxdb(influx_host_params, data_params)
         result = client.query('select value from temp')
 
         returned_value = list(result.get_points('temp'))
-        self.assertEquals(returned_value[0]['value'], 123)
+        self.assertEquals(returned_value[0]['value'], 12.5)
         client.drop_database('xproject_test')
