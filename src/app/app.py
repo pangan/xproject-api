@@ -16,7 +16,7 @@ class Resource(object):
             resp.status = falcon.HTTP_200
 
         elif req.path == '/health':
-            resp.body = ('OK')
+            resp.body = ('OK and running!')
             resp.status = falcon.HTTP_200
 
         elif req.path == '/test':
