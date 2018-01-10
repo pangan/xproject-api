@@ -3,8 +3,10 @@ from falcon import testing
 from faker import Faker
 import falcon
 import json
+import influxdb
 
 from ..app.app import myapp
+from ..app.utils import write_to_influxdb
 
 fake = Faker()
 
@@ -78,3 +80,40 @@ class TestMyApp(MyTestCase):
 
         result = self.simulate_put('/post_metrics')
         self.assertEqual(result.status, falcon.HTTP_405)
+
+    # it should be moved to utils test!
+    def test_write_influx(self):
+        """Test writing into the influxdb"""
+        influx_host = 'influx-influx.7e14.starter-us-west-2.openshiftapps.com'
+        influx_host_params= {
+            'host': influx_host,
+            'port': 80,
+            'database': 'xproject_test'
+        }
+        data_params = [
+            {
+                "measurement": "xmeasurement",
+                "tags": {
+                    "host": "server01",
+                    "region": "us-west"
+                },
+                "fields": {
+                    "value": 123
+                }
+            }
+        ]
+
+
+        client = influxdb.InfluxDBClient(
+            host=influx_host,
+            port=80, database='xproject_test')
+        client.drop_database('xproject_test')
+
+        rs = self.simulate_get('/write_test',query_string='database=xproject_test&value=123')
+        a = rs.status
+        #write_to_influxdb(influx_host_params, data_params)
+        result = client.query('select value from temp')
+
+        returned_value = list(result.get_points('temp'))
+        self.assertEquals(returned_value[0]['value'], 123)
+        client.drop_database('xproject_test')
