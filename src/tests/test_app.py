@@ -5,7 +5,7 @@ import falcon
 import json
 import influxdb
 
-from ..app.app import myapp
+from ..app.app import myapp, INFLUX_HOST
 from ..app.utils import write_to_influxdb
 
 fake = Faker()
@@ -84,9 +84,9 @@ class TestMyApp(MyTestCase):
     # it should be moved to utils test!
     def test_write_influx(self):
         """Test writing into the influxdb"""
-        influx_host = 'influx-influx.7e14.starter-us-west-2.openshiftapps.com'
+
         influx_host_params= {
-            'host': influx_host,
+            'host': INFLUX_HOST,
             'port': 80,
             'database': 'xproject_test'
         }
@@ -105,7 +105,7 @@ class TestMyApp(MyTestCase):
 
 
         client = influxdb.InfluxDBClient(
-            host=influx_host,
+            host=INFLUX_HOST,
             port=80, database='xproject_test')
         client.drop_database('xproject_test')
 
