@@ -43,6 +43,7 @@ class Resource(object):
                 }
             ]
             write_to_influxdb(influx_host_params, data_params)
+            resp.body('Wrote!')
             resp.status = falcon.HTTP_200
         else:
             resp.status = falcon.HTTP_405
