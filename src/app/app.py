@@ -10,7 +10,7 @@ class Resource(object):
         if req.path == '/':
             doc = {
                 'project': 'xproject-api',
-                'version':'0.1'
+                'version':'0.2'
             }
             resp.body = json.dumps(doc, ensure_ascii=False)
             resp.status = falcon.HTTP_200
