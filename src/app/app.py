@@ -34,7 +34,7 @@ class Resource(object):
                 {
                     "measurement": "temp",
                     "tags": {
-                        "host": "server01",
+                        "host": req.params['host'],
                         "region": "us-west"
                     },
                     "fields": {
