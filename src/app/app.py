@@ -1,8 +1,11 @@
-import falcon
 import json
+
+import falcon
+
 from utils import write_to_influxdb
 
 INFLUX_HOST = 'influx-influx.7e14.starter-us-west-2.openshiftapps.com'
+
 
 class Resource(object):
 
@@ -10,7 +13,7 @@ class Resource(object):
         if req.path == '/':
             doc = {
                 'project': 'xproject-api',
-                'version':'0.3'
+                'version': '0.1'
             }
             resp.body = json.dumps(doc, ensure_ascii=False)
             resp.status = falcon.HTTP_200
@@ -48,7 +51,6 @@ class Resource(object):
         else:
             resp.status = falcon.HTTP_405
 
-
     def on_post(self, req, resp):
 
         try:
@@ -63,12 +65,14 @@ class Resource(object):
             resp.status = falcon.HTTP_400
 
 
+class MyMiddleWare(object):
 
-
+    def process_request(self, req, resp):
+        pass
 
 
 def myapp():
-    app = falcon.API()
+    app = falcon.API(middleware=[MyMiddleWare()])
     resource = Resource()
     app.add_route('/', resource)
     app.add_route('/health', resource)
@@ -76,6 +80,7 @@ def myapp():
     app.add_route('/post_metrics', resource)
     app.add_route('/write_test', resource)
     return app
+
 
 if __name__ == '__main__':
     from wsgiref import simple_server

@@ -1,5 +1,6 @@
 from influxdb import InfluxDBClient
 
+
 def write_to_influxdb(host_params, data_param):
     client = InfluxDBClient(host=host_params['host'],
                             port=host_params['port'],

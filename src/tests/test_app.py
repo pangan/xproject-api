@@ -1,12 +1,12 @@
 
-from falcon import testing
+import json
+
 from faker import Faker
 import falcon
-import json
+from falcon import testing
 import influxdb
 
-from ..app.app import myapp, INFLUX_HOST
-from ..app.utils import write_to_influxdb
+from ..app.app import INFLUX_HOST, myapp
 
 fake = Faker()
 
@@ -95,3 +95,7 @@ class TestMyApp(MyTestCase):
         returned_value = list(result.get_points('temp'))
         self.assertEquals(returned_value[0]['value'], 12.5)
         client.drop_database('xproject_test')
+
+    def test_other_methods(self):
+        response = self.simulate_put()
+        self.assertEqual(response.status, falcon.HTTP_405)
