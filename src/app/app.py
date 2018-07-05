@@ -2,7 +2,7 @@ import json
 
 import falcon
 
-from utils import write_to_influxdb
+from .utils import write_to_influxdb
 
 INFLUX_HOST = 'influx-influx.7e14.starter-us-west-2.openshiftapps.com'
 
@@ -10,6 +10,7 @@ INFLUX_HOST = 'influx-influx.7e14.starter-us-west-2.openshiftapps.com'
 class Resource(object):
 
     def on_get(self, req, resp):
+        resp.status = falcon.HTTP_203
         if req.path == '/':
             doc = {
                 'project': 'xproject-api',
@@ -60,7 +61,7 @@ class Resource(object):
             json.loads(request_data)
             resp.body = request_data
             resp.status = falcon.HTTP_200
-        except ValueError, e:
+        except ValueError as e:
             resp.body = e.message
             resp.status = falcon.HTTP_400
 
