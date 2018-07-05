@@ -29,13 +29,13 @@ class TestMyApp(MyTestCase):
             'project': 'xproject-api',
             'version':'0.1'}
         result = self.simulate_get('/')
-        self.assertEqual(result.json, doc)
+        self.assertDictEqual(result.json, doc)
 
     def test_health(self):
         """Testing health"""
         result = self.simulate_get('/health')
         self.assertEqual(result.status, falcon.HTTP_200)
-        self.assertEqual(result.text, 'OK')
+        self.assertEqual(result.text, 'OK and running!')
 
     def test_testing(self):
         """Testing testing"""
@@ -87,7 +87,7 @@ class TestMyApp(MyTestCase):
             port=80, database='xproject_test')
         client.drop_database('xproject_test')
 
-        rs = self.simulate_get('/write_test',query_string='database=xproject_test&value=12.5')
+        rs = self.simulate_get('/write_test',query_string='database=xproject_test&value=12.5&host=localhost')
         a = rs.status
         #write_to_influxdb(influx_host_params, data_params)
         result = client.query('select value from temp')
