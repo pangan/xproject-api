@@ -10,6 +10,7 @@ from ..app.utils import write_to_influxdb
 
 fake = Faker()
 
+
 class MyTestCase(testing.TestCase):
     def setUp(self):
         super(MyTestCase, self).setUp()
@@ -29,7 +30,6 @@ class TestMyApp(MyTestCase):
             'version':'0.1'}
         result = self.simulate_get('/')
         self.assertEqual(result.json, doc)
-
 
     def test_health(self):
         """Testing health"""
@@ -63,15 +63,12 @@ class TestMyApp(MyTestCase):
         result = self.simulate_post(path='/post_metrics', body=json.dumps(sending_data), headers=headers)
         self.assertEqual(result.status, falcon.HTTP_400)
 
-
     def test_return_error_if_post_data_is_not_json(self):
         """Test return error if post data is not json"""
         sending_data = fake.text()
         headers = {'Content-Type': 'application/json'.format(fake.user_name())}
         result = self.simulate_post(path='/post_metrics', body=sending_data, headers=headers)
         self.assertEqual(result.status, falcon.HTTP_400)
-
-
 
     def test_not_posting_data_without_post(self):
         """Test not posting data without post"""
@@ -84,8 +81,6 @@ class TestMyApp(MyTestCase):
     # it should be moved to utils test!
     def test_write_influx(self):
         """Test writing into the influxdb"""
-
-
 
         client = influxdb.InfluxDBClient(
             host=INFLUX_HOST,
